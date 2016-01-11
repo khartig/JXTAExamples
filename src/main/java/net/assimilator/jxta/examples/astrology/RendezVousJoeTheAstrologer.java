@@ -24,7 +24,7 @@ public class RendezVousJoeTheAstrologer {
     
     // Static attributes
     public static final String Name = "RendezVous Joe, The Astrologer";
-    public static final int TcpPort = 9745;
+    public static final int TcpPort = 9710;
     public static final PeerID PID = IDFactory.newPeerID(PeerGroupID.defaultNetPeerGroupID, Name.getBytes());
     public static final File ConfigurationFile = new File("." + System.getProperty("file.separator") + Name);
     
@@ -58,11 +58,15 @@ public class RendezVousJoeTheAstrologer {
             Tools.PopInformationMessage(Name, "Start the JXTA network");
             PeerGroup netPeerGroup = networkManager.startNetwork();
 
-            Tools.PopInformationMessage(Name, "Setting the peer ID to :\n\n" + networkConfigurator.getPeerID().toString());
-            
+            //Tools.PopInformationMessage(Name, "Setting the peer ID to :\n\n" + networkConfigurator.getPeerID().toString());
+
+            // Setting the Peer ID
+            Tools.PopInformationMessage(Name, "Setting the peer ID to :\n\n" + PID.toString());
+            networkConfigurator.setPeerID(PID);
+
             // Loading the astrology service
             Tools.PopInformationMessage(Name, "Loading the astrology service");
-            Module astrologyModule = netPeerGroup.loadModule(AstrologyServiceExample.moduleClassID, AstrologyServiceExample.GetModuleImplementationAdvertisement());
+            Module astrologyModule = netPeerGroup.loadModule(AstrologyServiceExample.moduleClassID, AstrologyServiceExample.getModuleImplementationAdvertisement());
             
             // Starting the astrology service
             Tools.PopInformationMessage(Name, "Starting the astrology service");

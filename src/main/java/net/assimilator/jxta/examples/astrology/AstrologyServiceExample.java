@@ -16,6 +16,7 @@ import net.jxta.endpoint.StringMessageElement;
 import net.jxta.exception.PeerGroupException;
 import net.jxta.id.ID;
 import net.jxta.id.IDFactory;
+import net.jxta.impl.peergroup.CompatibilityUtils;
 import net.jxta.impl.protocol.ModuleImplAdv;
 import net.jxta.peergroup.PeerGroup;
 import net.jxta.peergroup.PeerGroupID;
@@ -61,6 +62,9 @@ public class AstrologyServiceExample implements Service, Runnable {
         try {
             moduleClassID = ModuleClassID.create(new URI(MyModuleClassIDString));
             moduleSpecID = ModuleSpecID.create(new URI(MyModuleSpecIDString));
+
+            System.out.println("Astrology Service moduleClassID = " + moduleClassID);
+            System.out.println("Astrology Service moduleSpecID = " + moduleSpecID);
         } catch (Exception Ex) {
             Tools.PopErrorMessage(Name, Ex.toString());
         }
@@ -87,7 +91,7 @@ public class AstrologyServiceExample implements Service, Runnable {
      *
      * @return PipeAdvertisement
      */
-    public static PipeAdvertisement GetPipeAdvertisement() {
+    public static PipeAdvertisement getPipeAdvertisement() {
 
         PipeAdvertisement pipeAdvertisement = (PipeAdvertisement) AdvertisementFactory.newAdvertisement(PipeAdvertisement.getAdvertisementType());
         PipeID pipeID = IDFactory.newPipeID(PeerGroupID.defaultNetPeerGroupID, Name.getBytes());
@@ -101,23 +105,23 @@ public class AstrologyServiceExample implements Service, Runnable {
 
     }
 
-    public static ModuleSpecAdvertisement GetModuleSpecificationAdvertisement() {
+    public static ModuleSpecAdvertisement getModuleSpecificationAdvertisement() {
 
-        ModuleSpecAdvertisement Result = (ModuleSpecAdvertisement) AdvertisementFactory.newAdvertisement(ModuleSpecAdvertisement.getAdvertisementType());
+        ModuleSpecAdvertisement result = (ModuleSpecAdvertisement) AdvertisementFactory.newAdvertisement(ModuleSpecAdvertisement.getAdvertisementType());
 
-        Result.setCreator("The Astrologers");
-        Result.setDescription("Astrology Service");
-        Result.setModuleSpecID(moduleSpecID);
-        Result.setVersion("1.0");
-        Result.setPipeAdvertisement(GetPipeAdvertisement());
+        result.setCreator("The Astrologers");
+        result.setDescription("Astrology Service");
+        result.setModuleSpecID(moduleSpecID);
+        result.setVersion("1.0");
+        result.setPipeAdvertisement(getPipeAdvertisement());
 
-        return Result;
+        return result;
 
     }
 
-    public static ModuleImplAdvertisement GetModuleImplementationAdvertisement() {
-
-        ModuleImplAdvertisement result = (ModuleImplAdvertisement) AdvertisementFactory.newAdvertisement(ModuleImplAdvertisement.getAdvertisementType());
+    public static ModuleImplAdvertisement getModuleImplementationAdvertisement() {
+        String adType = ModuleImplAdvertisement.getAdvertisementType();
+        ModuleImplAdvertisement result = (ModuleImplAdvertisement) AdvertisementFactory.newAdvertisement(adType);
 
         // Setting parameters
         result.setDescription("Astrology Service");
@@ -126,8 +130,9 @@ public class AstrologyServiceExample implements Service, Runnable {
         result.setCode(AstrologyServiceExample.class.getName());
 
         // Setting compatibility & binding
+        result.setCompat(CompatibilityUtils.createDefaultCompatStatement());
         //result.setCompat(StdPeerGroup.STD_COMPAT);
-        result.setCompat(null);
+        //result.setCompat(null);
 
         // Retrieving the location of the .jar file
         JFileChooser fileChooser = new JFileChooser();
@@ -180,7 +185,7 @@ public class AstrologyServiceExample implements Service, Runnable {
     public int startApp(String[] arg0) {
 
         try {
-            biDiPipeServer = new JxtaServerPipe(peerGroup, GetPipeAdvertisement(), 5000);
+            biDiPipeServer = new JxtaServerPipe(peerGroup, getPipeAdvertisement(), 5000);
 
             Thread thread = new Thread(this);
             thread.start();
@@ -257,7 +262,7 @@ public class AstrologyServiceExample implements Service, Runnable {
             jxtaBiDiPipe.setMessageListener(this);
         }
 
-        public static final int ComputeHoroscopeHash(String inString) {
+        public static final int computeHoroscopeHash(String inString) {
 
             int result = 0;
 
@@ -281,20 +286,19 @@ public class AstrologyServiceExample implements Service, Runnable {
                 Message message = event.getMessage();
 
                 MessageElement messageElement = message.getMessageElement(NameSpace, CustomerNameElement);
-                predictionHash = predictionHash + ComputeHoroscopeHash(messageElement.toString());
+                predictionHash = predictionHash + computeHoroscopeHash(messageElement.toString());
 
                 messageElement = message.getMessageElement(NameSpace, BirthDateElement);
-                predictionHash = predictionHash + ComputeHoroscopeHash(messageElement.toString());
+                predictionHash = predictionHash + computeHoroscopeHash(messageElement.toString());
 
                 messageElement = message.getMessageElement(NameSpace, BirthLocationElement);
-                predictionHash = predictionHash + ComputeHoroscopeHash(messageElement.toString());
+                predictionHash = predictionHash + computeHoroscopeHash(messageElement.toString());
 
                 predictionHash = predictionHash % 3;
 
                 String prediction = "";
 
                 switch ((int) predictionHash) {
-
                     case 0:
                         prediction = "You will be rich!";
                         break;
@@ -305,7 +309,6 @@ public class AstrologyServiceExample implements Service, Runnable {
 
                     default:
                         prediction = "You need to make more sacrifices to the Gods!";
-
                 }
 
                 // Sending answer

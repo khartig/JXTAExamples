@@ -29,7 +29,7 @@ import net.jxta.util.JxtaBiDiPipe;
 public class EdgeJillTheCustomer implements PipeMsgListener {
     
     public static final String Name = "Edge Jill, The Customer";
-    public static final int TcpPort = 9746;
+    public static final int TcpPort = 9712;
     public static final PeerID PID = IDFactory.newPeerID(PeerGroupID.defaultNetPeerGroupID, Name.getBytes());
     public static final File ConfigurationFile = new File("." + System.getProperty("file.separator") + Name);
     
@@ -67,13 +67,17 @@ public class EdgeJillTheCustomer implements PipeMsgListener {
             networkConfigurator.setTcpOutgoing(true);
 
             // Setting the Peer ID
-            Tools.PopInformationMessage(Name, "Setting the peer ID to :\n\n" + PID.toString());
-            networkConfigurator.setPeerID(PID);
+            //Tools.PopInformationMessage(Name, "Setting the peer ID to :\n\n" + PID.toString());
+            //networkConfigurator.setPeerID(PID);
 
             // Starting the JXTA network
             Tools.PopInformationMessage(Name, "Start the JXTA network and to wait for a rendezvous connection with\n"
                     + RendezVousJoeTheAstrologer.Name + " for maximum 2 minutes");
             PeerGroup netPeerGroup = networkManager.startNetwork();
+
+            // Setting the Peer ID
+            Tools.PopInformationMessage(Name, "Setting the peer ID to :\n\n" + PID.toString());
+            networkConfigurator.setPeerID(PID);
             
             // Disabling any rendezvous autostart
             netPeerGroup.getRendezVousService().setAutoStart(false);
@@ -88,10 +92,23 @@ public class EdgeJillTheCustomer implements PipeMsgListener {
             PipeMsgListener listener = new EdgeJillTheCustomer();
             
             // Retrieving the pipe advertisement from the module implementation advertisement
-            ModuleSpecAdvertisement moduleSpecAdvertisement = AstrologyServiceExample.GetModuleSpecificationAdvertisement();
+            ModuleSpecAdvertisement moduleSpecAdvertisement = AstrologyServiceExample.getModuleSpecificationAdvertisement();
+
             PipeAdvertisement pipeAdvertisement = moduleSpecAdvertisement.getPipeAdvertisement();
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             
             JxtaBiDiPipe biDiPipe = new JxtaBiDiPipe(netPeerGroup, pipeAdvertisement, 30000, listener);
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             
             if (biDiPipe.isBound()) {
             
