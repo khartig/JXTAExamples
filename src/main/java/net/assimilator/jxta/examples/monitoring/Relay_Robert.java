@@ -22,7 +22,6 @@ import net.jxta.platform.NetworkManager;
 public class Relay_Robert {
 
     // Static
-
     public static final String Name_RELAY = "RELAY";
     public static final PeerID PID_RELAY = IDFactory.newPeerID(PeerGroupID.defaultNetPeerGroupID, Name_RELAY.getBytes());
     public static final int HttpPort_RELAY = 9900;
@@ -40,31 +39,31 @@ public class Relay_Robert {
             NetworkManager.RecursiveDelete(ConfigurationFile_RELAY);
 
             // Creation of the network manager
-            final NetworkManager MyNetworkManager = new NetworkManager(
+            final NetworkManager myNetworkManager = new NetworkManager(
                     NetworkManager.ConfigMode.RELAY,
                     Name_RELAY, ConfigurationFile_RELAY.toURI());
 
             // Retrieving the network configurator
-            NetworkConfigurator MyNetworkConfigurator = MyNetworkManager.getConfigurator();
+            NetworkConfigurator myNetworkConfigurator = myNetworkManager.getConfigurator();
 
             // Setting Configuration
-            MyNetworkConfigurator.setUseMulticast(false);
+            myNetworkConfigurator.setUseMulticast(false);
 
-            MyNetworkConfigurator.setTcpPort(TcpPort_RELAY);
-            MyNetworkConfigurator.setTcpEnabled(true);
-            MyNetworkConfigurator.setTcpIncoming(true);
-            MyNetworkConfigurator.setTcpOutgoing(true);
+            myNetworkConfigurator.setTcpPort(TcpPort_RELAY);
+            myNetworkConfigurator.setTcpEnabled(true);
+            myNetworkConfigurator.setTcpIncoming(true);
+            myNetworkConfigurator.setTcpOutgoing(true);
 
-            MyNetworkConfigurator.setHttpPort(HttpPort_RELAY);
-            MyNetworkConfigurator.setHttpEnabled(true);
-            MyNetworkConfigurator.setHttpIncoming(true);
-            MyNetworkConfigurator.setHttpOutgoing(true);
+            myNetworkConfigurator.setHttpPort(HttpPort_RELAY);
+            myNetworkConfigurator.setHttpEnabled(true);
+            myNetworkConfigurator.setHttpIncoming(true);
+            myNetworkConfigurator.setHttpOutgoing(true);
 
             // Setting the Peer ID
-            MyNetworkConfigurator.setPeerID(PID_RELAY);
+            myNetworkConfigurator.setPeerID(PID_RELAY);
 
             // Starting the JXTA network
-            PeerGroup NetPeerGroup = MyNetworkManager.startNetwork();
+            PeerGroup NetPeerGroup = myNetworkManager.startNetwork();
 
             // Starting the connectivity monitor
             new ConnectivityMonitor(NetPeerGroup);
@@ -72,7 +71,7 @@ public class Relay_Robert {
             // Stopping the network asynchronously
             ConnectivityMonitor.TheExecutor.schedule(
                 new DelayedJxtaNetworkStopper(
-                    MyNetworkManager,
+                    myNetworkManager,
                     "Click to stop " + Name_RELAY,
                     "Stop"),
                 0,

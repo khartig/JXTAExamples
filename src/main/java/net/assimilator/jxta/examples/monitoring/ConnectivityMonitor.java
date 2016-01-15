@@ -430,12 +430,12 @@ public class ConnectivityMonitor extends JFrame implements Runnable {
 
     }
 
+    /**
+     *    Stopping monitor task
+     */
     @Override
     protected void finalize() {
-
-        // Stopping monitor task
         stopMonitorTask();
-
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -686,5 +686,6 @@ public class ConnectivityMonitor extends JFrame implements Runnable {
         }
 
     }
+
 
 }

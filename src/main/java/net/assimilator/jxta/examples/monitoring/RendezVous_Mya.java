@@ -5,9 +5,7 @@
  *
  */
 package net.assimilator.jxta.examples.monitoring;
-import java.io.File;
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
+
 import net.jxta.exception.PeerGroupException;
 import net.jxta.id.IDFactory;
 import net.jxta.peer.PeerID;
@@ -15,6 +13,10 @@ import net.jxta.peergroup.PeerGroup;
 import net.jxta.peergroup.PeerGroupID;
 import net.jxta.platform.NetworkConfigurator;
 import net.jxta.platform.NetworkManager;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Simple RENDEZVOUS peer connecting via the NetPeerGroup.
@@ -39,38 +41,38 @@ public class RendezVous_Mya {
             NetworkManager.RecursiveDelete(ConfigurationFile_RDV);
 
             // Creation of the network manager
-            final NetworkManager MyNetworkManager = new NetworkManager(
+            final NetworkManager myNetworkManager = new NetworkManager(
                     NetworkManager.ConfigMode.RENDEZVOUS,
                     Name_RDV, ConfigurationFile_RDV.toURI());
 
             // Retrieving the network configurator
-            NetworkConfigurator MyNetworkConfigurator = MyNetworkManager.getConfigurator();
+            NetworkConfigurator myNetworkConfigurator = myNetworkManager.getConfigurator();
 
             // Setting Configuration
-            MyNetworkConfigurator.setUseMulticast(false);
+            myNetworkConfigurator.setUseMulticast(false);
 
-            MyNetworkConfigurator.setTcpPort(TcpPort_RDV);
-            MyNetworkConfigurator.setTcpEnabled(true);
-            MyNetworkConfigurator.setTcpIncoming(true);
-            MyNetworkConfigurator.setTcpOutgoing(true);
+            myNetworkConfigurator.setTcpPort(TcpPort_RDV);
+            myNetworkConfigurator.setTcpEnabled(true);
+            myNetworkConfigurator.setTcpIncoming(true);
+            myNetworkConfigurator.setTcpOutgoing(true);
 
             // Setting the Peer ID
-            MyNetworkConfigurator.setPeerID(PID_RDV);
+            myNetworkConfigurator.setPeerID(PID_RDV);
 
             // Starting the JXTA network
-            PeerGroup NetPeerGroup = MyNetworkManager.startNetwork();
+            PeerGroup NetPeerGroup = myNetworkManager.startNetwork();
 
             // Starting the connectivity monitor
             new ConnectivityMonitor(NetPeerGroup);
 
             // Stopping the network asynchronously
             ConnectivityMonitor.TheExecutor.schedule(
-                new DelayedJxtaNetworkStopper(
-                    MyNetworkManager,
-                    "Click to stop " + Name_RDV,
-                    "Stop"),
-                0,
-                TimeUnit.SECONDS);
+                    new DelayedJxtaNetworkStopper(
+                            myNetworkManager,
+                            "Click to stop " + Name_RDV,
+                            "Stop"),
+                    0,
+                    TimeUnit.SECONDS);
 
         } catch (IOException Ex) {
 

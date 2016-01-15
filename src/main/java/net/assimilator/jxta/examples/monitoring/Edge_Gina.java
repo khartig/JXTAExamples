@@ -27,7 +27,7 @@ public class Edge_Gina {
 
     // Static
 
-    public static final String Name_EDGE = "EDGE GINA";
+    public static final String Name_EDGE = "EDGE";
     public static final PeerID PID_EDGE = IDFactory.newPeerID(PeerGroupID.defaultNetPeerGroupID, Name_EDGE.getBytes());
     public static final int TcpPort_EDGE = 9710;
     public static final int HttpPort_EDGE = 9900;
@@ -49,85 +49,79 @@ public class Edge_Gina {
             System.out.println(PeerGroup.tcpProtoClassID);
 
             // Creation of the network manager
-            final NetworkManager MyNetworkManager = new NetworkManager(
+            final NetworkManager myNetworkManager = new NetworkManager(
                     NetworkManager.ConfigMode.EDGE,
                     Name_EDGE, ConfigurationFile_EDGE.toURI());
 
             // Retrieving the network configurator
-            NetworkConfigurator MyNetworkConfigurator = MyNetworkManager.getConfigurator();
+            NetworkConfigurator myNetworkConfigurator = myNetworkManager.getConfigurator();
 
             // Setting Configuration
-            MyNetworkConfigurator.setUseMulticast(false);
+            myNetworkConfigurator.setUseMulticast(false);
 
-            MyNetworkConfigurator.setTcpPort(TcpPort_EDGE);
+            myNetworkConfigurator.setTcpPort(TcpPort_EDGE);
 
             if ( Tools.PopYesNoQuestion(Name_EDGE, "Do you want to enable TCP?") == JOptionPane.YES_OPTION ) {
 
-                MyNetworkConfigurator.setTcpEnabled(true);
-                MyNetworkConfigurator.setTcpIncoming(true);
-                MyNetworkConfigurator.setTcpOutgoing(true);
+                myNetworkConfigurator.setTcpEnabled(true);
+                myNetworkConfigurator.setTcpIncoming(true);
+                myNetworkConfigurator.setTcpOutgoing(true);
 
             } else {
-
-                MyNetworkConfigurator.setTcpEnabled(false);
-                MyNetworkConfigurator.setTcpIncoming(false);
-                MyNetworkConfigurator.setTcpOutgoing(false);
-
+                myNetworkConfigurator.setTcpEnabled(false);
+                myNetworkConfigurator.setTcpIncoming(false);
+                myNetworkConfigurator.setTcpOutgoing(false);
             }
 
-            MyNetworkConfigurator.setHttpPort(TcpPort_EDGE);
+            myNetworkConfigurator.setHttpPort(TcpPort_EDGE);
 
             if ( Tools.PopYesNoQuestion(Name_EDGE, "Do you want to enable HTTP?") == JOptionPane.YES_OPTION ) {
-
-                MyNetworkConfigurator.setHttpEnabled(true);
-                MyNetworkConfigurator.setHttpIncoming(false);
-                MyNetworkConfigurator.setHttpOutgoing(true);
-
+                myNetworkConfigurator.setHttpEnabled(true);
+                myNetworkConfigurator.setHttpIncoming(false);
+                myNetworkConfigurator.setHttpOutgoing(true);
             } else {
-
-                MyNetworkConfigurator.setHttpEnabled(false);
-                MyNetworkConfigurator.setHttpIncoming(false);
-                MyNetworkConfigurator.setHttpOutgoing(false);
-
+                myNetworkConfigurator.setHttpEnabled(false);
+                myNetworkConfigurator.setHttpIncoming(false);
+                myNetworkConfigurator.setHttpOutgoing(false);
             }
 
             // Setting the Peer ID
-            MyNetworkConfigurator.setPeerID(PID_EDGE);
+            myNetworkConfigurator.setPeerID(PID_EDGE);
 
             // Adding RDV seed
-            MyNetworkConfigurator.clearRendezvousSeeds();
+            myNetworkConfigurator.clearRendezvousSeeds();
 
-            String TheRdvSeed = "tcp://" + InetAddress.getLocalHost().getHostAddress() + ":"
+            String rdvSeed = "tcp://" + InetAddress.getLocalHost().getHostAddress() + ":"
                     + RendezVous_Mya.TcpPort_RDV;
-            URI RendezVousSeedURI = URI.create(TheRdvSeed);
-            MyNetworkConfigurator.addSeedRendezvous(RendezVousSeedURI);
+            URI rendezVousSeedURI = URI.create(rdvSeed);
+            myNetworkConfigurator.addSeedRendezvous(rendezVousSeedURI);
 
             // Adding Relay seed
-            MyNetworkConfigurator.clearRelaySeeds();
+            myNetworkConfigurator.clearRelaySeeds();
 
-            String TheRelaySeed = "http://" + InetAddress.getLocalHost().getHostAddress() + ":"
+            String httpRelaySeed = "http://" + InetAddress.getLocalHost().getHostAddress() + ":"
                     + Relay_Robert.HttpPort_RELAY;
-            URI RelaySeedURI = URI.create(TheRelaySeed);
-            MyNetworkConfigurator.addSeedRelay(RelaySeedURI);
+            URI httpRelaySeedURI = URI.create(httpRelaySeed);
+            myNetworkConfigurator.addSeedRelay(httpRelaySeedURI);
 
-            String TheRelaySeed2 = "tcp://" + InetAddress.getLocalHost().getHostAddress() + ":"
+            String tcpRelaySeed = "tcp://" + InetAddress.getLocalHost().getHostAddress() + ":"
                     + Relay_Robert.TcpPort_RELAY;
-            URI RelaySeedURI2 = URI.create(TheRelaySeed2);
-            MyNetworkConfigurator.addSeedRelay(RelaySeedURI2);
+            URI tcpRelaySeedURI = URI.create(tcpRelaySeed);
+            myNetworkConfigurator.addSeedRelay(tcpRelaySeedURI);
 
             // Starting the JXTA network
-            PeerGroup NetPeerGroup = MyNetworkManager.startNetwork();
+            PeerGroup netPeerGroup = myNetworkManager.startNetwork();
 
             // Starting the connectivity monitor
-            new ConnectivityMonitor(NetPeerGroup);
+            new ConnectivityMonitor(netPeerGroup);
 
             // Disabling any rendezvous autostart
-            NetPeerGroup.getRendezVousService().setAutoStart(false);
+            netPeerGroup.getRendezVousService().setAutoStart(false);
 
             // Stopping the network asynchronously
             ConnectivityMonitor.TheExecutor.schedule(
                 new DelayedJxtaNetworkStopper(
-                    MyNetworkManager,
+                    myNetworkManager,
                     "Click to stop " + Name_EDGE,
                     "Stop"),
                 0,
