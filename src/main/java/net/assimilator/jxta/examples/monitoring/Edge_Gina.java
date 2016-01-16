@@ -85,9 +85,6 @@ public class Edge_Gina {
                 myNetworkConfigurator.setHttpOutgoing(false);
             }
 
-            // Setting the Peer ID
-            myNetworkConfigurator.setPeerID(PID_EDGE);
-
             // Adding RDV seed
             myNetworkConfigurator.clearRendezvousSeeds();
 
@@ -111,6 +108,9 @@ public class Edge_Gina {
 
             // Starting the JXTA network
             PeerGroup netPeerGroup = myNetworkManager.startNetwork();
+
+            // Setting the Peer ID
+            myNetworkConfigurator.setPeerID(PID_EDGE);
 
             // Starting the connectivity monitor
             new ConnectivityMonitor(netPeerGroup);

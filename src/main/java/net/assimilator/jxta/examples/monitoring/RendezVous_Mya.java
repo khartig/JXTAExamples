@@ -56,11 +56,12 @@ public class RendezVous_Mya {
             myNetworkConfigurator.setTcpIncoming(true);
             myNetworkConfigurator.setTcpOutgoing(true);
 
+            // Starting the JXTA network
+            PeerGroup NetPeerGroup = myNetworkManager.startNetwork();
+
             // Setting the Peer ID
             myNetworkConfigurator.setPeerID(PID_RDV);
 
-            // Starting the JXTA network
-            PeerGroup NetPeerGroup = myNetworkManager.startNetwork();
 
             // Starting the connectivity monitor
             new ConnectivityMonitor(NetPeerGroup);

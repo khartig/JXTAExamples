@@ -59,14 +59,14 @@ public class Relay_Robert {
             myNetworkConfigurator.setHttpIncoming(true);
             myNetworkConfigurator.setHttpOutgoing(true);
 
+            // Starting the JXTA network
+            PeerGroup netPeerGroup = myNetworkManager.startNetwork();
+
             // Setting the Peer ID
             myNetworkConfigurator.setPeerID(PID_RELAY);
 
-            // Starting the JXTA network
-            PeerGroup NetPeerGroup = myNetworkManager.startNetwork();
-
             // Starting the connectivity monitor
-            new ConnectivityMonitor(NetPeerGroup);
+            new ConnectivityMonitor(netPeerGroup);
 
             // Stopping the network asynchronously
             ConnectivityMonitor.TheExecutor.schedule(
