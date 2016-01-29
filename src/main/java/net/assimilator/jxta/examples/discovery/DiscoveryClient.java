@@ -95,6 +95,7 @@ public class DiscoveryClient implements DiscoveryListener {
 //                        1,
 //                        // no query specific listener. we are using a global listener
 //                        null);
+
                 discovery.getRemoteAdvertisements(// no specific peer (propagate)
                         null, // Adv type
                         DiscoveryService.ADV, // Attribute = any

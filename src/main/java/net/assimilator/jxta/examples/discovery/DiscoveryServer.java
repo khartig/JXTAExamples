@@ -15,11 +15,13 @@ import net.jxta.id.IDFactory;
 import net.jxta.peergroup.PeerGroup;
 import net.jxta.peergroup.PeerGroupID;
 import net.jxta.pipe.PipeService;
+import net.jxta.platform.NetworkConfigurator;
 import net.jxta.platform.NetworkManager;
 import net.jxta.protocol.DiscoveryResponseMsg;
 import net.jxta.protocol.PipeAdvertisement;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Enumeration;
 
 /**
@@ -43,10 +45,22 @@ public class DiscoveryServer implements DiscoveryListener {
             e.printStackTrace();
             System.exit(-1);
         }
-        PeerGroup netPeerGroup = manager.getNetPeerGroup();
 
-        // get the discovery service
-        discovery = netPeerGroup.getDiscoveryService();
+        try {
+
+            NetworkConfigurator networkConfigurator = null;
+            networkConfigurator = manager.getConfigurator();
+
+            networkConfigurator.setUseMulticast(true);
+
+            networkConfigurator.setUseMulticast(true);
+            PeerGroup netPeerGroup = manager.getNetPeerGroup();
+
+            // get the discovery service
+            discovery = netPeerGroup.getDiscoveryService();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
