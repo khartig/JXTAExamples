@@ -23,7 +23,7 @@
             </snapshots>
         </repository>
 
-        <!-- Sonatype repository containing JXSE.jar
+        <!-- Sonatype repository containing JXSE.jar -->
         <repository>
             <id>repository.oss.sonatype.org</id>
             <url>https://oss.sonatype.org/content/repositories/staging/com/kenai/jxse/</url>
@@ -31,8 +31,8 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-        -->
 
+        <!--
         <repository>
             <id>org.janus-project.maven</id>
             <name>Janus Project Snapshots</name>
@@ -41,9 +41,18 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+        -->
 
 
     </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>JBoss Repo</id>
+            <url>https://repository.jboss.org/nexus/content/repositories/releases</url>
+            <name>JBoss Repo</name>
+        </pluginRepository>
+    </pluginRepositories>
 
     <dependencies>
         <dependency>
@@ -54,8 +63,8 @@
 
         <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk15</artifactId>
-            <version>1.45</version>
+            <artifactId>bcprov-jdk16</artifactId>
+            <version>1.46</version>
         </dependency>
 
         <dependency>
@@ -94,6 +103,7 @@
             <version>7.0.0.pre5</version>
         </dependency>
 
+        <!--
         <dependency>
             <groupId>org.jboss.netty</groupId>
             <artifactId>httptunnel</artifactId>
@@ -103,8 +113,9 @@
         <dependency>
             <groupId>org.jboss.netty</groupId>
             <artifactId>netty</artifactId>
-            <version>3.2.2.Final</version>
+            <version>3.2.9.Final</version>
         </dependency>
+        -->
 
         <dependency>
             <groupId>org.apache.felix</groupId>
